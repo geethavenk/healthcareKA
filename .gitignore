@@ -1,0 +1,29 @@
+# --- secrets ---
+.env
+
+# -- python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+venv/
+.venv/
+env/
+ENV/
+
+# --- testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# -- IDE ---
+.vscode/
+.idea/
+
+# -- OS --
+.DS_Store
+Thumbs.db
+
+# -- Docker ---
+*.log
