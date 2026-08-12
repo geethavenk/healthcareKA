@@ -21,7 +21,7 @@ class DepartmentResponse(BaseModel):
     create_at: datetime
 
 
-class DoctroCreate(BaseModel):
+class DoctorCreate(BaseModel):
     name: str = Field(min_length=2, max_length=100, examples=["Dr. Jane Smith"])
     specialty: str = Field(min_length=2, max_length=100, examples=["Cardiology"])
     department_id: int = Field(gt=0)
@@ -135,7 +135,7 @@ class AskResponse(BaseModel):
     related_entities: list[RelatedEntity]
 
 
-class HealthResponsons(BaseModel):
+class HealthResponse(BaseModel):
     status: str
     postgres: str
     neo4j: str
