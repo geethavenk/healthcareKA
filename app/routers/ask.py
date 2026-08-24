@@ -6,7 +6,7 @@ NEVER provides a medical diagnosis.
 Rate limited to 5 requests per minute
 """
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, HTTPException, status
 from sqlalchemy.orm import Session
 
 from database import get_db
@@ -27,7 +27,13 @@ def ask(
     db: Session = Depends(get_db)
 ):
     # Run the full Graph RAG pipelin
-    result = answer_question(db, ask_request.question, top_k=ask_request.top_k)
+    try:
+        result = answer_question(db, ask_request.question, top_k=ask_request.top_k)
+    except Exception as e:
+        raise HTTPException(
+        status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+        detail=f"Unable to generate an answer right now: {e}",
+        )
 
     #  Log the question and answer to Postgres
     question_record = models.Question(

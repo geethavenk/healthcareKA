@@ -57,7 +57,7 @@ def create_department_node(department_id:int, name:str) -> None:
 
 def create_doctor_node(doctor_id:int, name:str, specialty:str, department_id:int) -> None:
     query = """
-    MERGE (doc:Doctor {id: $id})
+    MERGE (doc:Doctor {id: $doctor_id})
     SET doc.name = $name, doc.specialty = $specialty
     WITH doc
     MATCH (dep:Department {id: $department_id})
@@ -111,10 +111,14 @@ def link_symptom_to_department(symptom_name:str, department_name:str) -> None:
     """
     Seeds general knowledge like (Symptom {name: 'skin rash'})-[:RELATED_TO]->(Department {name: 'Dermatology'}).
     Used so /ask can anser "which department handles X probelems" style questions.
+
+    The department must already exist as a node. We MATCH rather than MERGE it, because
+    create_department_node() keys Department on id - merging on name here would create a
+    second, name-only Department node instead of finding the existing one.
     """
     query="""
-    MERGE (s:Symtom {name: $symptom_name})
-    MERGE (dep: Department {name: $department_name})
+    MATCH (dep:Department {name: $department_name})
+    MERGE (s:Symptom {name: $symptom_name})
     MERGE (s)-[:RELATED_TO]->(dep)
     """
     with get_driver().session() as session:
@@ -132,6 +136,18 @@ def get_doctors_by_specialty(specialty:str) -> list[dict]:
     with get_driver().session() as session:
         result = session.run(query, specialty=specialty)
         return [dict(record) for record in result]
+
+def get_symptom_links() -> list[dict]:
+    """Every seeded (Symptom)-[:RELATED_TO]->(Department) pair, for GET /symptoms."""
+    query="""
+    MATCH (s:Symptom)-[:RELATED_TO]->(dep:Department)
+    RETURN s.name AS symptom, dep.name AS department
+    ORDER BY symptom
+    """
+    with get_driver().session() as session:
+        result = session.run(query)
+        return [dict(record) for record in result]
+
 
 def get_related_entities(keywords: list[str], limit:int = 10) -> list[dict]:
     """

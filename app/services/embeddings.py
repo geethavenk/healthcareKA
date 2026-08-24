@@ -8,7 +8,7 @@ from openai import OpenAI
 from pypdf import PdfReader
 from config import settings
 
-_client = OpenAI | None = None
+_client: OpenAI | None = None
 
 def get_openai_client() -> OpenAI:
     global _client

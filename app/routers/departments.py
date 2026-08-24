@@ -30,7 +30,7 @@ def create_department(department: schemas.DepartmentCreate, db:Session=Depends(g
 
     try:
         neo4j_client.create_department_node(
-            department_id=new_department.id
+            department_id=new_department.id,
             name=new_department.name
         )   
     except Exception as e:

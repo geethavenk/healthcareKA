@@ -18,7 +18,7 @@ class DepartmentResponse(BaseModel):
     id:int
     name: str
     description: Optional[str] = None
-    create_at: datetime
+    created_at: datetime
 
 
 class DoctorCreate(BaseModel):
@@ -57,12 +57,12 @@ class PatientResponse(BaseModel):
     age: Optional[int] = None
     gender: Optional[str] = None
     contact: Optional[str] = None
-    create_at: datetime
+    created_at: datetime
 
 
 class AppointmentCreate(BaseModel):
     patient_id: int = Field(gt=0)
-    doctor_id: int = Field(ge=0)
+    doctor_id: int = Field(gt=0)
     appointment_date: datetime
     reason: Optional[str] = Field(None, max_length=500, examples=["Follow-up consultation"]) 
 
@@ -78,6 +78,17 @@ class AppointmentResponse(BaseModel):
     status: str
     created_at: datetime
 
+
+class SymptomLink(BaseModel):
+    symptom: str = Field(min_length=2, max_length=100, examples=["skin rash"])
+    department_name: str = Field(min_length=2, max_length=100, examples=["Dermatology"])
+
+
+class SymptomLinkResponse(BaseModel):
+    symptom: str
+    department: str
+
+
 # for listing documents that have been uploaded
 class DocumentResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -86,7 +97,7 @@ class DocumentResponse(BaseModel):
     title: str
     source_type: str
     uploaded_by: Optional[str] = None
-    create_at: datetime
+    created_at: datetime
 
 # Response right after upload - tells how many chunks were extracted and embedded
 class DocumentUploadResponse(BaseModel):
@@ -96,7 +107,7 @@ class DocumentUploadResponse(BaseModel):
 
 
 class SearchRequest(BaseModel):
-    query: str = Field(min_length=1, max_digits=500, examples=["symptoms of diabetes"])
+    query: str = Field(min_length=1, max_length=500, examples=["symptoms of diabetes"])
     top_k: int = Field(5, ge=1, le=20)
 
 

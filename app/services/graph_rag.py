@@ -64,7 +64,7 @@ def vector_search(db: Session, query_embedding: list[float], top_k:int=5) -> lis
             "chunk_text": chunk.chunk_text,
             "similarity_score": round(1-dist,4),
         })
-        return results
+    return results
 
 
 def graph_search(question:str) -> list[dict]:

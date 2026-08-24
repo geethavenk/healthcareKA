@@ -14,7 +14,7 @@ from database import init_db, SessionLocal
 from security import limiter, rate_limit_exceeded_handler
 import neo4j_client, models
 
-from routers import health, departments, doctors, patients, appointments, documents, search, ask
+from routers import health, departments, doctors, patients, appointments, documents, search, ask, symptoms
 
 # Startup/shutdown lifecycle
 
@@ -51,10 +51,17 @@ app.add_middleware(
 )
 
 # Request logging
+
+UNLOGGED_PATHS = {"/health", "/favicon.ico", "/docs", "/redoc", "/openapi.json"}
+
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
     start_time = time.perf_counter()
     response = await call_next(request)
+
+    if request.url.path in UNLOGGED_PATHS:
+        return response
+    
     duration_ms = int((time.perf_counter() - start_time) * 1000)
 
     # write the log entry
@@ -83,4 +90,5 @@ app.include_router(appointments.router)
 app.include_router(documents.router)
 app.include_router(search.router)
 app.include_router(ask.router)
+app.include_router(symptoms.router)
 
