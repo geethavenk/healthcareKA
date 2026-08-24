@@ -4,8 +4,8 @@ Streamlit frontend for the healthcare knowledge and appointment assistant.
 
 import os
 import requests
-import steamlit as st
-import padas as pd
+import streamlit as st
+import pandas as pd
 
 # Config 
 BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
@@ -50,13 +50,13 @@ def _handle_response(resp: requests.Response):
 
 # Header
 st.title("🏥 Healthcare Knowledge and Appointment Assistant")
-st.caption(f"Connected to backend: {BACKEND_URL}")
+#st.caption(f"Connected to backend: {BACKEND_URL}")
 
 tabs = st.tabs(["Departments & Doctors", "Patients", "Appointments", "Documents", "Search", "Ask"])
 
 # Tab 1: Departments and Doctors
 
- with tabs[0]:
+with tabs[0]:
     col1, col2 = st.columns(2)
 
     with col1:

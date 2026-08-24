@@ -17,7 +17,7 @@ COPY . .
 EXPOSE 8000
 
 # Basic container-level healthcheck hitting our /health endpoint
-HEALTHCHECK --interval=15s --timeout=5s --start-period=10s --retries=5 CMD curl -f http://localhost:8000/health || exit 1
+HEALTHCHECK --interval=60s --timeout=5s --start-period=10s --retries=5 CMD curl -f http://localhost:8000/health || exit 1
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 

@@ -32,8 +32,9 @@ def init_db() -> None:
     2. Create all tables defined in models.py if they dont exist yet.
 
     """
-    with engine.connect() as conn:
+    with engine.begin() as conn:
         conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector;"))
+       
 
     # Import models here (not at top of file) to avoid circular imports, 
     # since models.py imports Base from this file

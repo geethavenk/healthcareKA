@@ -5,8 +5,6 @@ services:
     image: pgvector/pgvector:pg16
     container_name: healthcare_postgres 
     restart: unless-stopped
-    env_file:
-      - .env
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -27,8 +25,6 @@ services:
       image: neo4j:5
       container_name: healthcare_neo4j
       restart: unless-stopped
-      env_file:
-        - .env
       environment:
         NEO4J_AUTH: ${NEO4J_USER}/${NEO4J_PASSWORD}
       ports:

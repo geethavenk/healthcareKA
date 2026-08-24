@@ -18,7 +18,7 @@ from services.embeddings import extract_text, chunk_text, get_embeddings_batch
 
 router = APIRouter(prefix="/documents", tags=["Documents"], dependencies=[Depends(verify_api_key)])
 
-@router.post("", response_model=schemas.DepartmentResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=schemas.DocumentUploadResponse, status_code=status.HTTP_201_CREATED)
 @limiter.limit(settings.rate_limit_documents)
 async def upload_document(
     request: Request,
@@ -77,6 +77,6 @@ async def upload_document(
         chunks_created=len(chunks)
     )
 
-@router.get("", response_model=list[schemas.DepartmentResponse])
+@router.get("", response_model=list[schemas.DocumentResponse])
 def list_documents(db:Session = Depends(get_db)):
     return db.query(models.Document).order_by(models.Document.created_at.desc()).all()
